@@ -4,6 +4,7 @@ import userRouter from "./routes/userRoutes.js"
 import authRouter from "./routes/authRoutes.js"
 
 import connectDB from "./config/db.js";
+import { errorHandler } from "./middlewares/errorMiddleware.js";
 const app = express();
 app.use(express.json()); //to allow the server to recieve json data
 dotenv.config();
@@ -17,6 +18,10 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+
+
+app.use(errorHandler);
+
 
 app.listen(port, () => {
     console.log(`Server is live on port: ${port}`);
