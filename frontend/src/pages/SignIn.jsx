@@ -2,13 +2,15 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInFailure, signInSuccess } from "../slices/userSlice";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false)
+  const {loading} = useSelector((state) => {
+    return state.user
+  })
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -18,7 +20,7 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    dispatch(signInStart());
     try {
       const res = await fetch("/api/auth/signin", {
         method: "POST",
@@ -30,18 +32,18 @@ export default function SignIn() {
       
       const data = await res.json()
       if (data.success === false) {
-        setLoading(false)
-        toast.error(data.message)
+        dispatch(signInFailure())
+        toast.error(data.message);
         return 
       } 
       
       toast.success("Logged in!");
-      setLoading(false)
+      dispatch(signInSuccess(data))
       navigate("/");
       // console.log(data);
     } catch (err) {
-      setLoading(false)
-      toast.error(err.message)
+      dispatch(signInFailure());
+      toast.error(err?.data?.message || err.error)
     }
 
   }
