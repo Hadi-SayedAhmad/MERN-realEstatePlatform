@@ -1,6 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import User from "../models/userModel.js"
 import { generateToken } from "../utils/generateToken.js"
+
 export const signUp = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
     const newUser = await User.create({
@@ -8,7 +9,12 @@ export const signUp = asyncHandler(async (req, res) => {
         email,
         password
     })
-    res.status(201).json("User created successfully!");
+    generateToken(newUser._id, res);
+    res.status(201).json({
+        _id: newUser._id,
+        name: newUser.username,
+        email: newUser.email,
+    });
 })
 
 

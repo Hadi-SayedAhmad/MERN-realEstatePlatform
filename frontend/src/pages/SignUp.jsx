@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { signInStart, signInFailure, signInSuccess } from "../slices/userSlice";
 import OAuth from "../components/OAuth";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -10,7 +12,7 @@ export default function SignUp() {
     return state.user
   })
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -37,9 +39,9 @@ export default function SignUp() {
         return 
       } 
       
-      toast.success(data);
+      toast.success("Logged In!");
       dispatch(signInSuccess(data))
-      navigate("/sign-in");
+      navigate("/");
       // console.log(data);
     } catch (err) {
       dispatch(signInFailure())
@@ -56,7 +58,7 @@ export default function SignUp() {
         <input type='text' placeholder='Username' className='border p-3 rounded-lg focus:outline-none' id='username' onChange={handleChange} />
         <input type='email' placeholder='Email' className='border p-3 rounded-lg focus:outline-none' id='email' onChange={handleChange} />
         <input type='password' placeholder='Password' className='border p-3 rounded-lg focus:outline-none' id='password' onChange={handleChange} />
-        <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-80'>{loading ? "LOADING..." : "Sign Up"}</button>
+        <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-80' onClick={handleChange} >{loading ? "LOADING..." : "Sign Up"}</button>
         <OAuth />
       </form>
       <div className='flex gap-2 mt-5'>
@@ -69,3 +71,4 @@ export default function SignUp() {
     </div>
   )
 }
+
