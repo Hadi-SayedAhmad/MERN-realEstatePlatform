@@ -7,13 +7,15 @@ export const signUp = asyncHandler(async (req, res) => {
     const newUser = await User.create({
         username,
         email,
-        password
+        password,
+        
     })
     generateToken(newUser._id, res);
     res.status(201).json({
         _id: newUser._id,
         name: newUser.username,
         email: newUser.email,
+        avatar: newUser.avatar
     });
 })
 
@@ -27,6 +29,7 @@ export const signIn = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.username,
             email: user.email,
+            avatar: user.avatar
         });
     } else {
         res.status(404);
