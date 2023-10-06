@@ -2,12 +2,15 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false)
+  const {loading} = useSelector((state) => {
+    return state.user
+  })
   const navigate = useNavigate();
-
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -17,7 +20,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    dispatch(signInStart());
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -29,17 +32,17 @@ export default function SignUp() {
       
       const data = await res.json()
       if (data.success === false) {
-        setLoading(false)
+        dispatch(signInFailure())
         toast.error(data.message)
         return 
       } 
       
       toast.success(data);
-      setLoading(false)
+      dispatch(signInSuccess(data))
       navigate("/sign-in");
       // console.log(data);
     } catch (err) {
-      setLoading(false)
+      dispatch(signInFailure())
       toast.error(err.message)
     }
 
