@@ -1,8 +1,9 @@
 import express from "express"
-import { test } from "../controllers/userControllers.js";
+import { updateUserProfile } from "../controllers/userControllers.js";
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
-router.get("/test", test)
+router.post("/update/:id", protect, updateUserProfile);
 
 
 

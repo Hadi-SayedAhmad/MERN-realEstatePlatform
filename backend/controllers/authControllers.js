@@ -38,8 +38,8 @@ export const signIn = asyncHandler(async (req, res) => {
 })
 
 //OAuth
-export const google = async (req, res) => {
-    try {
+export const google = asyncHandler(async (req, res) => {
+    
         const user = await User.findOne({ email: req.body.email });
         if (user) {
             generateToken(user._id, res);
@@ -69,7 +69,5 @@ export const google = async (req, res) => {
                 avatar: newUser.avatar
             });
         }
-    } catch (err) {
-
-    }
-}
+    
+})
