@@ -6,13 +6,13 @@ import User from "../models/userModel.js"
 //@route POST /api/user/update/:id
 //@access Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-    const { name, email, password, avatar } = req.body;
+    const { username, email, password, avatar } = req.body;
     // console.log(req.user);
     if (req.user && (req.user._id == req.params.id)) {
         const user = await User.findById(req.user._id)
         // console.log(user);
         if (user) {
-            user.username = name || user.username;
+            user.username = username || user.username;
             user.email = email || user.email;
             if (password) {
                 user.password = password;
