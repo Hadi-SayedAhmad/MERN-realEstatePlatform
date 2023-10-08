@@ -1,3 +1,4 @@
+
 import { FaSearch } from "react-icons/fa"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
@@ -5,7 +6,7 @@ export default function Header() {
     const { currentUser } = useSelector((state) => {
         return state.user;
     })
-
+    
 
     return (
         <header className='bg-slate-200 shadow-md'>

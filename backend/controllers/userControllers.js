@@ -3,6 +3,29 @@ import User from "../models/userModel.js"
 
 
 //@desc update profile
+//@route DELETE /api/user/delete/:id
+//@access Private
+export const deleteUser = asyncHandler(
+    async (req, res) => {
+        if (req.user && (req.user._id == req.params.id)) {
+            const user = await User.findById(req.user._id)
+            if (user) {
+                await User.findByIdAndDelete({ _id: req.user._id });
+                res.status(200).clearCookie("jwt").json(
+                    "Account deleted successfully!"
+                );
+            } else {
+                res.status(404)
+                throw new Error("User not found!");
+            }
+        } else {
+            req.status(401);
+            throw new Error("You can only delete your own profile! Check your token.");
+        }
+    }
+)
+
+//@desc update profile
 //@route POST /api/user/update/:id
 //@access Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
@@ -32,8 +55,8 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         }
 
     } else {
-        res.status(500);
-        throw new Error("Can't update the profile!");
+        res.status(401);
+        throw new Error("You can only update your own profile! Check your token.");
     }
 
 })

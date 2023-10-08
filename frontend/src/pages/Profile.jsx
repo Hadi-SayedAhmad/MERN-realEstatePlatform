@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"
 import { app } from "../firebase.js"
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import axios from "axios"
-import { updateUserStart, updateUserFailure, updateUserSuccess } from "../slices/userSlice.js";
+import { updateUserStart, updateUserFailure, updateUserSuccess, deleteStart, deleteFailure, deleteSuccess } from "../slices/userSlice.js";
 import { toast } from "react-toastify"
 export default function Profile() {
   const { currentUser, loading } = useSelector(state => state.user);
@@ -14,7 +15,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({})
   console.log(formData);
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -81,6 +82,30 @@ export default function Profile() {
     }
   }
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    dispatch(deleteStart());
+    try {
+      if (window.confirm("Are you sure?")) {
+        const res = await axios.delete(`/api/user/delete/${currentUser._id}`)
+        // console.log(res.data);
+        if (res.success === false) {
+          toast.error(res.message);
+          dispatch(deleteFailure());
+          return
+        } else {
+          toast.success(res.data);
+          dispatch(deleteSuccess());
+          navigate("/sign-in")
+        }
+      }
+
+    } catch (error) {
+      toast.error(error.message);
+      dispatch(deleteFailure())
+    }
+  }
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -103,7 +128,7 @@ export default function Profile() {
         <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">{loading ? "Updating..." : "Update"}</button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
+        <span onClick={handleDelete} className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
         <span className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
       </div>
     </div>
