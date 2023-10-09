@@ -2,7 +2,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import User from "../models/userModel.js"
 
 
-//@desc update profile
+//@desc delete profile
 //@route DELETE /api/user/delete/:id
 //@access Private
 export const deleteUser = asyncHandler(
