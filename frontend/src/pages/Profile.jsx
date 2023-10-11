@@ -6,6 +6,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import axios from "axios"
 import { updateUserStart, updateUserFailure, updateUserSuccess, deleteStart, deleteFailure, deleteSuccess, signOutStart, signOutSuccess, signOutFailure } from "../slices/userSlice.js";
 import { toast } from "react-toastify"
+import { Link } from "react-router-dom";
 export default function Profile() {
   const { currentUser, loading } = useSelector(state => state.user);
   const fileRef = useRef(null)
@@ -147,11 +148,15 @@ export default function Profile() {
         <input value={formData.email} defaultValue={currentUser.email} type="email" placeholder="Email" className="border p-3 rounded-lg outline-none" id="email" onChange={handleChange} />
         <input type="password" placeholder="Password" className="border p-3 rounded-lg outline-none " id="password" onChange={handleChange} />
         <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">{loading ? "Updating..." : "Update"}</button>
+        <Link className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95" to={"/create-listing"}>
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDelete} className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
         <span onClick={handleSignOut} className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
       </div>
+
     </div>
   )
 }

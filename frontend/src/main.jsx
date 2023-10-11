@@ -16,6 +16,7 @@ import Profile from "./pages/Profile.jsx"
 import { store } from "./store.js"
 import { Provider } from 'react-redux'
 import PrivateRoute from './pages/PrivateRoute.jsx'
+import CreateListing from './pages/CreateListing.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
@@ -27,7 +28,7 @@ const router = createBrowserRouter(
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
-
+        <Route path='/create-listing' element={<CreateListing />}></Route>
       </Route>
 
 

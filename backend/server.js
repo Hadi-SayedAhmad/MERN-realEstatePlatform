@@ -4,6 +4,7 @@ import userRouter from "./routes/userRoutes.js"
 import authRouter from "./routes/authRoutes.js"
 import connectDB from "./config/db.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
+import listingRouter from "./routes/listingRoutes.js"
 
 const app = express();
 app.use(express.json()); //to allow the server to recieve json data
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
-
+app.use("/api/listing", listingRouter);
 
 app.use(errorHandler);
 
